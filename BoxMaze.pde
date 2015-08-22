@@ -1,7 +1,11 @@
-//getting rid of nextMoverId and rewriting code to think in terms of running the correct action
-//based on the type of block collided with. doBlockAction will be run when a block triggers another block.
-//this will be checked and run at the time of checking isBlocked() when moving. Getting ready to add exploding blocks.
-//that was movers and exploders will have their own actions, which can be triggered by getting hit.
+// <copyright file="BoxMaze.pde">
+// Copyright (c) 2015 All Right Reserved, http://boxmazegame.com/
+//
+// </copyright>
+// <author>Andrew Albers</author>
+// <email>andrew.albers@gmail.com</email>
+// <date>2015-08-22</date>
+// <summary>Contains Processing code for Box Maze Game</summary>
 
 static int ACT_ID_CHANGED = 0;
 static int MOVING = 1;
@@ -33,8 +37,8 @@ static int DIR_DOWN = 3;
 static int DIR_UP = 4;
 
 static int SQUARESIZE = 50;
-static int SCREEN_W = 800;
-static int SCREEN_H = 800;
+static int SCREEN_W = 1000;
+static int SCREEN_H = 650;
 
 static int INDEX_X = 0;
 static int INDEX_Y = 1;
@@ -84,7 +88,7 @@ int[][] blockState = new int[NUMBLOCKS][4]; //body, mouth, eyes, timer
 int[][] gameMap = new int[SCREEN_W/SQUARESIZE][SCREEN_H/SQUARESIZE]; //2D array of open vs. blocked squares
 
 void setup(){
-  size(800,800);
+  size(1000,650);
   pg = createGraphics(width, height); //create graphics buffer
   background(0,0,0);
   initializeGameMap();
@@ -684,7 +688,7 @@ void renderBlock(int id)
 
 void render(){
   if(main_menu_on && game_is_beginning == false){
-    image(mainMenu, 100, 100, 600, 491);
+    image(mainMenu, 200, 25, 600, 491);
   }
   else{
     if(frameChange > 0){
@@ -706,7 +710,7 @@ void render(){
     }
   }
   if (gameState == WINNING){
-    image(winMenu, 150, 275, 500, 250);
+    image(winMenu, 250, 200, 500, 250);
   }
 }
 
