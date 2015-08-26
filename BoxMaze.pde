@@ -1,3 +1,4 @@
+
 // <copyright file="BoxMaze.pde">
 // Copyright (c) 2015 All Right Reserved, http://boxmazegame.com/
 //
@@ -6,6 +7,19 @@
 // <email>andrew.albers@gmail.com</email>
 // <date>2015-08-22</date>
 // <summary>Contains Processing code for Box Maze Game</summary>
+
+interface JavaScript {
+  void playBlast();
+  void playBlastCrate();
+  void playSwish();
+  void playMusic();
+}
+
+void bindJavascript(Javascript js) {
+  javascript = js;
+}
+
+Javascript javascript;
 
 static int ACT_ID_CHANGED = 0;
 static int MOVING = 1;
@@ -73,6 +87,8 @@ int frameLast = 0;
 int frameChange = 0;
 float millisPerFrame = 30;
 
+int lastMusicUpdate = -30000;
+
 int actionId = NONE;
 float playerSpeed = 0.0;
 int moveDir = DIR_NONE;
@@ -108,6 +124,7 @@ void draw() {
   updateTime();
   updateRenderStates();
   updateGame();
+  updateMusic();
   render();
 }
 
@@ -166,6 +183,15 @@ void changeBlocks()
   }
   else if(key == 'T') {
     if(isBlocksAvailable()) {numBlockTypes[BLK_TNT] += 1;  }
+  }
+}
+
+void updateMusic()
+{
+  if (javascript != null && timeNow - lastMusicUpdate >= 28450)
+  {
+    lastMusicUpdate = timeNow;
+    javascript.playMusic();
   }
 }
 
@@ -253,6 +279,9 @@ void doExplodeAction()
 
 void explode(int id, int startFrame)
 {
+  if (javascript != null) {
+    javascript.playBlast();
+  }
   uproot(id);
   int targetId;
   for(int i = int(blocks[id][INDEX_X]) - 1; i <= int(blocks[id][INDEX_X]) + 1; i++)
@@ -268,6 +297,9 @@ void explode(int id, int startFrame)
         }
         else if(blocks[targetId][INDEX_TYPE] == BLK_WOOD)
         {
+          if (javascript != null) {
+            javascript.playBlastCrate();
+           }
           uproot(targetId);
           destroy(targetId, startFrame + 2);
         }
@@ -302,6 +334,9 @@ void initializeAction(int id)
   {  
      uproot(actionId);
      setDest();
+     if(javascript != null){
+       javascript.playSwish();
+     }
    }
   else if(blocks[id][INDEX_TYPE] == BLK_TNT)
   { }
